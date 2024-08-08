@@ -1,0 +1,211 @@
+1. starting point
+main tracker class which create stats for display 
+when we addMeal it will update the values for tracker object
+
+
+2.classes for meal and workout objects that to be passed inside these methods addMeal and addWorkout
+
+
+3. instantiate an object from  CalorieTracker class to which we add meals and workouts.
+
+4.now instantiate breakfast and workout and call on tracker so that tracker values gets update.
+
+5.inside CalorieTracker class create methods to display the stats on the UI.
+We are going to have methods to display the total calories, the calorie limit, the calories consumed,
+the calories burned, and the calories remaining. Thye should be private methods .
+
+6.in the constructor CalorieTracker we want to run these methods [_displayCaloriesTotal()] bcz the constructor runs
+  immmediately when we instantiate the class that is when we create an object from class .
+
+
+7. now once we instantiate the class those methods will run ...but we also want those to be run when we addMeal or addWorkout.
+so we put them inside _render method and call this _render() inside addMeal and addWorkout.
+
+8.The Limit is going to change when click on "SET DAILY LIMIT" btn so we don't wana put inside of _render() but we put inside constructor bcz we
+ want to run it when app loads.
+
+
+9. create a private method of '_displayCaloriesConsumed' , for this we will apply reduced() on meals array.
+  call this method inside constructor when page loads and inside _render.
+
+10.same step 9 for workouts array.
+
+11. now _displayCaloriesRemaining() in which subtract total calories from calorie limit and update dom
+
+12.Make Progress Bar Working 
+      Math.min() gives us minimum of given two values
+
+13. create a method in the CalorieTracker class called _displayCaloriesProgress.
+
+                   ////Step # 4
+
+14.Now create the App class. The App class is going to be the main class that will control the entire application.
+ It will be responsible for initializing the CalorieTracker class and it is where all of the event listeners will be added.
+
+ 15. In the App class constructor set CalorieTracker to property now in this we have access to public methods of 
+ CalorieTracker.
+
+ 16.In the constructor of App we put all our event listeners.
+
+ 17.For Now we fire off the function _newMeal() when we submit the form by click add meal.
+
+ 18.when we do fire off _newMeal() the "this" would be 'form' where from event is fire off so we use bind() method
+
+ 19. create a new meal inside app class's method _newMeal() bcz we can call a global class inside any other class
+
+20.now on _tracker call addMeal() which is a public method.
+
+21.make a workout like addMeal on this._tracker.
+
+22.add event listener same for add work .
+
+23.close the form collapse using new bootstrap.Collapse.
+
+              ///step # 5 Refactor
+ 24. _newMeal() and newWorkout() methods are very similar. We are going to
+combine them into a single method called _newItem() .
+BTW we can keep them separte
+
+25.To distinguish b/w workout and meal we pass an argument into bind method
+
+26. when these event are fired off 
+document.getElementById('meal-form').addEventListener('submit', this._addItem.bind(this, 'meal'));
+document.getElementById('workout-form').addEventListener('submit', this._newItem.bind(this, 'workout'));
+
+then the string of 'meal' and  'workout' will get recievd in the function of _newItem, where we can use it.
+
+ the string 'meal' passed to bind will be received as an argument in the _addItem method.
+
+ following is summary:
+
+ this._addItem.bind(this, 'meal'):
+The bind method creates a new function that, when called, has its this keyword set to
+ the provided value (this in this case), 
+and a given sequence of arguments preceding any provided when the new function is called.
+The first argument to bind is the value for this inside the function (this refers to the current context,
+ usually the instance of the class).
+The second argument 'meal' is a parameter that will be passed to the _addItem method. 
+and then we can use this to check whether its meal or workout       
+
+                                    <--//Extra Impt Note Regarding Event Listeners inside constructor-->
+
+ When using classes in JavaScript, it is common practice to set up event listeners within the constructor....
+
+ 1.The constructor is the special method for creating and initializing an object created with a class. 
+ By setting up event listeners in the constructor,
+  we ensure that they are attached as soon as an instance of the class is created.
+
+2.This means all necessary event handlers are ready and waiting for user interaction as soon as the object
+ is instantiated, ensuring that the object behaves as expected from the outset.       
+
+ 3.When event listeners are defined within the constructor,
+  we can ensure that they are bound to the instance of the class correctly.
+
+4.JavaScript event listeners may lose the context (this) if not properly bound. 
+By using the constructor, we can bind the event handlers to the current instance of the class,
+ ensuring that this refers to the instance within the event handler.                                                        
+
+
+                                                                   //Step#6
+                                             Display New Meal & Workout
+
+
+27.So we are able to add a meal or workout via the forms and the calories are factored into the stats, but
+we still don't see the meal or workout. So we are going to create two methods, _displayNewMeal() and
+_displayNewWorkout() .
+             
+                        ///Step # 7    Add Meal/Workout to the dom
+ 28.In public method addMeal , befor _render() , call _displayNewMeal()             
+     CREATE method of _displayNewMeal() in   class CalorieTracker .
+     same goes for workout.
+
+29.after creating div and adding classes we set a data attribute to get the ID of the meal when we want to delete it.         
+           
+
+
+
+                                                          //Step # 7
+                                                          Delete Items 
+
+ 30.Deleting meal and workouts items when click on x ....since these are multiple items so we will use event delegation
+ i.e put event listener on parent element and target actual element which was clicked .     
+
+31.Grab the 'meals-items'  which is parent of all meals ....then put an event listener and listen for 'click'
+also bind this....to the current context using bind();
+create _removeItem() inside class App......
+
+32.check for if user click on icon or button .....i.e x
+
+33.now we want ID of that div which we created while making of it...in the class of Meal & Workout.
+
+34.we use method of closest('.card')....so we get closest card to where we click...
+then use method getAttribute  ...that id we need to pass in to _tracker..._tracker is that what we instantiated
+in the class of app ....
+
+
+***Impt Note :=>
+      this removes the meal from dom but when it happens nothing changes in Caloire consumed and its neigbouring
+      div for those changes it happens with _tracker .
+      so we add two methods for that in _tracker up there in public method
+
+
+
+
+
+
+
+        <------------------STEP # 8 Filter Functionlity & Reset functionality --------------------->
+
+35.add event listener in constructor app.......get the filter-meals and listen for keyup and call _filteritems and bind 
+and give type 'meals'
+
+36. in class app , outside of constructor , define a method _filteritems.
+
+37.reset every thing in app.
+      And then the tracker is what's going to reset like all the the total calories and all that stuff.
+      So let's say this dot underscore tracker and we'll call this let's say we'll just call that reset as
+      well.
+    
+     Then we want to clear up basically any meal items and workout items, basically anything that has to
+      do with just the DOM.
+      The tracker has to do with the calories, with the two arrays, the meals and workouts.
+
+
+        <------------------STEP # 9 Change Daily calorie Limit --------------------->
+
+        38. calorie limit is in tracker so call a method on _tracker. i.e setlimit().
+
+
+
+        <------------------STEP # 10 LocalStorage --------------------->
+
+        we gonna have a separate class of storage , to store the things in the local storage.
+39.Let's create a Storage class:
+              class Storage {}
+              This class will have all static methods. Meaning we do not have to instantiate the class. There is no
+              need to because we never need more than one instance. So we can call the methods directly from the
+              class (Storage.methodName());
+
+
+              40. Handle all the localstorage functionalites .........
+   
+
+
+
+
+here
+constructor() {
+        this.calorieLimit = Storage.getCalorieLimit(2000);
+        this._totalCalories = Storage.getTotalCalories(0);
+        this._meals = Storage.getMeals();
+        this._workouts = Storage.getWorkouts();
+
+        this._displayCaloriesTotal();
+        this._displayCaloriesLimit();
+        this._displayCaloriesConsumed();
+        this._displayCaloriesBurned();
+        this._displayCaloriesRemaining();
+        this._displayCaloriesProgress();
+
+        document.getElementById('limit').value = this._calorieLimit;
+    }
